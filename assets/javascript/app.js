@@ -10,22 +10,23 @@ $(document).ready(function(){
     const offset = "&offset=0";
     const rating = "&rating=G";
     const lang = "&lang=en";
-    var queryURL2 = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm&q=dog&limit=10&offset=0&rating=G&lang=en";
+    var queryURL2 = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm&q=dog&limit=1&offset=0&rating=G&lang=en";
     var queryURL3 = "https://api.giphy.com/v1/gifs/random?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm&tag=cat&rating=G";
-    
+    var queryURL4 = "http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm";
+
     // Perfoming an AJAX GET request to our queryURL
     $.ajax({
-        //crossDomain: true,
-        //dataType: 'jsonp',
-        //url: queryURL+api_KEY+search+limit+offset+rating+lang,
-        url: queryURL3, // This is not working for some reason
+        //dataType: 'json',
+        //contentType: 'json',
+        //url: queryURL+api_KEY+search+limit+rating,
+        url: queryURL2, // This is not working for some reason
         method: "GET"
     })
 
     // After the data from the AJAX request comes back
     .then(function(response) {
         // Saving the image_original_url property
-        var imageUrl = response.data.image_original_url;
+        var imageUrl = response.data[0].images.downsized.url;
         // Creating and storing an image tag
         var image = $("<img>");
         // Setting the image src attribute to imageUrl
@@ -38,6 +39,8 @@ $(document).ready(function(){
         image.classList.add("gif"); */
         // Prepending the image to the images div
         $("#images").prepend(image);
+        console.log(response.data);
+        console.log(imageUrl);
         });
     });
 
