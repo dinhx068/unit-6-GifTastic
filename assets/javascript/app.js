@@ -2,12 +2,10 @@
 var list = ["Gordon Ramsay", "Barack Obama", "Beyoncé", "Emma Watson", "Keanu Reeves", "Donnie Yen", "Jackie Chan", "Jet Li", "Pewdiepie", "Dyrus", 
 "John-117", "Mario", "Walter White","Micky Mouse", "Homer Simpson", "Ash Ketchum" ,"Kaneki Ken", "Exodia", "Lelouch Lamperouge", "Doge"];
 
-// Building the Query
+// Components of the Query
 const api_KEY = "api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm";
 const limit = "&limit=10";
-const offset = "&offset=0";
 const rating = "&rating=G";
-const lang = "&lang=en";
 
 // When one of the person or character buttons are clicked
 function displayPersonInfo() {
