@@ -1,5 +1,5 @@
 var list = ["Gordon Ramsay", "Barack Obama", "Beyoncé", "Emma Watson", "Keanu Reeves", "Donnie Yen", "Jackie Chan", "Jet Li", "Pewdiepie", "Dyrus", 
-"John-117", "Mario", "Walter White","Micky Mouse", "Homer Simpson", "Ash Ketchum" ,"Midoriya Deku", "Lelouch Lamperouge", "Rintarou Okabe", "Doge"];
+"John-117", "Mario", "Walter White","Micky Mouse", "Homer Simpson", "Ash Ketchum" ,"Kaneki Ken", "Midoriya Deku", "Lelouch Lamperouge", "Doge"];
 /*
 // Event listener for our cat-button
 $("#cat-button").on("click", function() {
@@ -8,41 +8,11 @@ var queryURL = "https://api.giphy.com/v1/gifs/search?"; */
 const api_KEY = "api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm";
 const limit = "&limit=10";
 const offset = "&offset=0";
-const rating = "&rating=G";
+const rating = "&rating=PG";
 const lang = "&lang=en";
-var queryURL2 = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm&q=dog&limit=1&offset=0&rating=G&lang=en";
+/*var queryURL2 = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm&q=dog&limit=1&offset=0&rating=G&lang=en";
 var queryURL3 = "https://api.giphy.com/v1/gifs/random?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm&tag=cat&rating=G";
 var queryURL4 = "http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm";
-/*
-// Perfoming an AJAX GET request to our queryURL
-$.ajax({
-    //dataType: 'json',
-    //contentType: 'json',
-    //url: queryURL+api_KEY+search+limit+rating,
-    url: queryURL2, // This is not working for some reason
-    method: "GET"
-})
-
-// After the data from the AJAX request comes back
-.then(function(response) {
-    // Saving the image_original_url property
-    var imageUrl = response.data[0].images.downsized.url;
-    // Creating and storing an image tag
-    var image = $("<img>");
-    // Setting the image src attribute to imageUrl
-    image.attr("src", imageUrl);
-    image.attr("alt", "cat image");
-    // Data-states of "Animate", "Still" and needs data-state
-    /* image.attr("data-state", "animate");
-    image.attr("data-animate", "");
-    image.attr("data-still", "");
-    image.classList.add("gif");
-    // Prepending the image to the images div
-    $("#images").prepend(image);
-    console.log(response.data);
-    console.log(imageUrl);
-    });
-});
 */
 
 // When one of the person or character buttons are clicked
@@ -50,7 +20,7 @@ function displayPersonInfo() {
     // To remove previous images if there was any
     $(".person").remove();
     var search = "&q=" + $(this).attr("data-name");
-    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm" + search + limit;
+    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm" + search + limit + rating;
 
     // Creating an AJAX call for the specific person button being clicked
     $.ajax({
@@ -66,29 +36,39 @@ function displayPersonInfo() {
             var rating = response.data[i].rating;
 
             // Creating an element to have the rating displayed
-            var pOne = $("<p>").text("Rating: " + rating);
+            var pOne = $("<p>").text("Rating: " + rating.toUpperCase());
 
             // Displaying the rating
             personDiv.append(pOne);
 
             // Retrieving the URL for the image
             var imgURL = response.data[i].images.downsized.url;
+            var imgStillURL = response.data[i].images.downsized_still.url;
 
             // Creating an element to hold the image
             var image = $("<img>").attr("src", imgURL);
+
+            // Giving img attributes so image can toggle between animated and still
+            image.attr("data-state", "still");
+            image.attr("data-animate", imgURL);
+            image.attr("data-still", imgStillURL);
+
+            // For the button the toggle the gif state
+            image.addClass("gif");
+
 
             // Appending the image
             personDiv.append(image);
 
             // Putting the entire person above the previous person
-            $("#images").prepend(personDiv);
+            $("#images").append(personDiv);
             console.log(response.data);
         }
     });
 
-    } // End of displayMovieInfo()
+    } // End of displayPersonInfo()
 
-// Function for displaying movie data
+// Function for displaying all person or character buttons
 function renderButtons() {
 
     // Deleting the list prior to adding new people or characters
@@ -102,7 +82,7 @@ function renderButtons() {
         // This code $("<button>") is all jQuery needs to create the beginning and end tag. (<button></button>)
         var a = $("<button>");
         // Adding a class of person-btn to our button
-        a.addClass("person-btn");
+        a.addClass("person-btn btn btn-default");
         // Adding a data-attribute
         a.attr("data-name", list[i]);
         // Providing the initial button text

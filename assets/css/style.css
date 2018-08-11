@@ -1,9 +1,22 @@
 .container {
     float: left;
+    padding: 10px;
 }
+
 body {
     padding: 0;
     margin: 0;
     background: url("../images/background.png");
     background-repeat: repeat;
+}
+
+button,
+div,
+form,
+input {
+  margin: 10px;
+}
+
+p {
+    color: white;
 }
