@@ -1,12 +1,11 @@
-var list = ["Barack Obama", "Beyoncé", "Emma Watson", "Keanu Reeves", "Donnie Yen", "Jackie Chan", "Jet Li", "Pewdiepie", "Daequan Loco",
-"Dyrus", "John-117", "Jhin, the Virtusoso", "Walter White", "Homer Simpson", "Ash Ketchum" , "Lelouch Lamperouge", "Rintarou Okabe", "Doge"];
+var list = ["Gordon Ramsay", "Barack Obama", "Beyoncé", "Emma Watson", "Keanu Reeves", "Donnie Yen", "Jackie Chan", "Jet Li", "Pewdiepie", "Dyrus", 
+"John-117", "Mario", "Walter White","Micky Mouse", "Homer Simpson", "Ash Ketchum" ,"Midoriya Deku", "Lelouch Lamperouge", "Rintarou Okabe", "Doge"];
 /*
 // Event listener for our cat-button
 $("#cat-button").on("click", function() {
 // Storing our giphy API URL for a random cat image
-var queryURL = "https://api.giphy.com/v1/gifs/search?";
+var queryURL = "https://api.giphy.com/v1/gifs/search?"; */
 const api_KEY = "api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm";
-var search = "&q=dog"; // We will have have to get this from the user input
 const limit = "&limit=10";
 const offset = "&offset=0";
 const rating = "&rating=G";
@@ -14,7 +13,7 @@ const lang = "&lang=en";
 var queryURL2 = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm&q=dog&limit=1&offset=0&rating=G&lang=en";
 var queryURL3 = "https://api.giphy.com/v1/gifs/random?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm&tag=cat&rating=G";
 var queryURL4 = "http://api.giphy.com/v1/gifs/search?q=funny+cat&api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm";
-
+/*
 // Perfoming an AJAX GET request to our queryURL
 $.ajax({
     //dataType: 'json',
@@ -45,10 +44,13 @@ $.ajax({
     });
 });
 */
+
+// When one of the person or character buttons are clicked
 function displayPersonInfo() {
-    removeImages();
-    var person = $(this).attr("data-name");
-    var queryURL = "https://www.omdbapi.com/?t=" + person + "&y=&plot=short&apikey=trilogy";
+    // To remove previous images if there was any
+    $(".person").remove();
+    var search = "&q=" + $(this).attr("data-name");
+    var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=HXjPGl9EXf7b9vTRgGNZtlOIpWa3cQBm" + search + limit;
 
     // Creating an AJAX call for the specific person button being clicked
     $.ajax({
@@ -56,29 +58,32 @@ function displayPersonInfo() {
         method: "GET"
     }).then(function(response) {
 
-        // Creating a div to hold the person
-        var personDiv = $("<div class='person'>");
+        for (var i = 0; i < 10; i++) {
+            // Creating a div to hold the person
+            var personDiv = $("<div class='person'>");
 
-        // Storing the rating data
-        var rating = response.Rated;
+            // Storing the rating data
+            var rating = response.data[i].rating;
 
-        // Creating an element to have the rating displayed
-        var pOne = $("<p>").text("Rating: " + rating);
+            // Creating an element to have the rating displayed
+            var pOne = $("<p>").text("Rating: " + rating);
 
-        // Displaying the rating
-        personDiv.append(pOne);
+            // Displaying the rating
+            personDiv.append(pOne);
 
-        // Retrieving the URL for the image
-        var imgURL = response.Poster;
+            // Retrieving the URL for the image
+            var imgURL = response.data[i].images.downsized.url;
 
-        // Creating an element to hold the image
-        var image = $("<img>").attr("src", imgURL);
+            // Creating an element to hold the image
+            var image = $("<img>").attr("src", imgURL);
 
-        // Appending the image
-        personDiv.append(image);
+            // Appending the image
+            personDiv.append(image);
 
-        // Putting the entire person above the previous person
-        $("#images").prepend(personDiv);
+            // Putting the entire person above the previous person
+            $("#images").prepend(personDiv);
+            console.log(response.data);
+        }
     });
 
     } // End of displayMovieInfo()
@@ -107,11 +112,6 @@ function renderButtons() {
     }
 }
 
-// TODO, Need to find a way to remove buttons that are currently on the screen
-function removeImages() {
-    $(".person").remove();
-}
-
 $("#add-person").on("click", function(event) {
     event.preventDefault();
     // This line grabs the input from the textbox
@@ -122,6 +122,9 @@ $("#add-person").on("click", function(event) {
 
     // Calling renderButtons which handles the processing of our person array
     renderButtons();
+
+    // Clearing input
+    document.getElementById("person-input").value= "";
 });
 
 $(".gif").on("click", function() {
